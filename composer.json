@@ -1,0 +1,44 @@
+{
+  "name": "wilfreedi/laravel-site-protection",
+  "description": "Site protection",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Nikolay Grigoriev",
+      "email": "wilfreedi@ya.ru"
+    }
+  ],
+  "require": {
+    "php": "^8.1",
+    "guzzlehttp/guzzle": "^7.0"
+  },
+  "require-dev": {
+    "orchestra/testbench": "^7.2",
+    "phpunit/phpunit": "^9.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Wilfreedi\\SiteProtection\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Wilfreedi\\SiteProtection\\Test\\": "tests/"
+    }
+  },
+  "scripts": {
+    "test": [
+      "vendor/bin/phpunit"
+    ]
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Wilfreedi\\SiteProtection\\SiteProtectionServiceProvider"
+      ],
+      "aliases": {
+        "AcMen": "Wilfreedi\\SiteProtection\\Facades\\SiteProtection"
+      }
+    }
+  }
+}
