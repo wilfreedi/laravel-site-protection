@@ -2,7 +2,9 @@
 
 namespace Wilfreedi\SiteProtection;
 
+use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Support\ServiceProvider;
+use Wilfreedi\SiteProtection\Exceptions\Handler;
 
 class SiteProtectionServiceProvider extends ServiceProvider
 {
@@ -26,5 +28,8 @@ class SiteProtectionServiceProvider extends ServiceProvider
             __DIR__.'/../config/siteprotection.php',
             'siteprotection'
         );
+
+        $this->app->singleton(ExceptionHandler::class, Handler::class);
+
     }
 }

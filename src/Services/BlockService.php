@@ -2,6 +2,8 @@
 
 namespace Wilfreedi\SiteProtection\Services;
 
+use Illuminate\Support\Facades\Cache;
+
 class BlockService
 {
 
