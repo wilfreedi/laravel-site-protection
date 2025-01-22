@@ -2,30 +2,28 @@
 
 namespace Wilfreedi\SiteProtection\Services;
 
-class BotChecker extends BaseChecker
+class BotCheckerService
 {
-    public function check($request): bool
-    {
+    public static function check($request, $config): bool {
         $userAgent = $request->header('User-Agent');
 
         if (empty($userAgent)) {
-            $this->log('Empty User-Agent detected', ['ip' => $request->ip()]);
             return true;
         }
 
-        foreach ($this->config['bots']['allowed'] as $bot) {
+        foreach ($config['bots']['allowed'] as $bot) {
             if (stripos($userAgent, $bot) !== false) {
                 return false;
             }
         }
 
-        foreach ($this->config['bots']['blocked'] as $bot) {
+        foreach ($config['bots']['blocked'] as $bot) {
             if (stripos($userAgent, $bot) !== false) {
-                $this->log('Blocked bot detected', ['ip' => $request->ip()]);
                 return true;
             }
         }
 
         return false;
     }
+
 }

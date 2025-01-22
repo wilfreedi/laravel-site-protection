@@ -3,11 +3,6 @@
 return [
     'enabled' => true,
 
-    'logging' => [
-        'enabled' => true,
-        'driver'  => 'daily',
-    ],
-
     'captcha' => [
         'provider'  => 'recaptcha',
         'providers' => [
@@ -20,7 +15,7 @@ return [
 
     'bots' => [
         'blocked' => ['BadBot', 'EvilScraper'],
-        'allowed' => ['Googlebot', 'Bingbot'],
+        'allowed' => ['Googlebot', 'Yandexbot'],
     ],
 
     'rate_limiting' => [
@@ -28,9 +23,9 @@ return [
         'block_time_minutes'      => 15,
     ],
 
-    'geo_protection' => [
-        'enabled'         => true,
-        'block_countries' => ['RU', 'CN'],
+    '404_protection' => [
+        'max_404_errors' => 3,
+        'block_time_minutes' => 10,
     ],
 
     'exclude_paths' => [

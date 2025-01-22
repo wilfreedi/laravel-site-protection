@@ -3,30 +3,15 @@
 namespace Wilfreedi\SiteProtection\Middleware;
 
 use Closure;
-use Wilfreedi\SiteProtection\Services\BotChecker;
-use Wilfreedi\SiteProtection\Services\RateLimiter;
+use Wilfreedi\SiteProtection\Services\SiteProtectionService;
 
 class SiteProtectionMiddleware
 {
-    protected $botChecker;
-    protected $rateLimiter;
 
-    public function __construct(BotChecker $botChecker, RateLimiter $rateLimiter)
-    {
-        $this->botChecker = $botChecker;
-        $this->rateLimiter = $rateLimiter;
-    }
+    public function handle($request, Closure $next) {
 
-    public function handle($request, Closure $next)
-    {
-        if (config('siteprotection.enabled')) {
-            if ($this->botChecker->check($request)) {
-                return redirect('/captcha');
-            }
-
-            if ($this->rateLimiter->check($request)) {
-                return redirect('/captcha');
-            }
+        if(SiteProtectionService::isSpam($request)) {
+            return to_route('site-protection.captcha.show');
         }
 
         return $next($request);
