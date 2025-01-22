@@ -19,13 +19,11 @@ return [
     ],
 
     'rate_limiting' => [
-        'max_requests_per_second' => 5,
-        'block_time_minutes'      => 15,
+        'max_requests_per_second' => 5
     ],
 
     '404_protection' => [
-        'max_404_errors' => 3,
-        'block_time_minutes' => 10,
+        'max_404_errors' => 3
     ],
 
     'exclude_paths' => [

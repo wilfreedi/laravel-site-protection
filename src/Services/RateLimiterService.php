@@ -21,10 +21,11 @@ class RateLimiterService
         return false;
     }
 
-    public static function isRateLimited(string $ip, array $config): bool {
-        $rateLimitKey = "rate_limit:{$ip}";
-        $hits = Cache::increment($rateLimitKey);
-        Cache::put($rateLimitKey, $hits, now()->addSeconds(1));
+    public static function isRateLimited($ip, $config): bool {
+        $cacheKey = "rate_limit:{$ip}";
+
+        $hits = Cache::increment($cacheKey);
+        Cache::put($cacheKey, $hits, now()->addSeconds(1));
 
         if ($hits > $config['rate_limiting']['max_requests_per_second']) {
             return true;
@@ -33,20 +34,16 @@ class RateLimiterService
         return false;
     }
 
-    public static function hasTooMany404Errors(string $ip, array $config): bool {
+    public static function hasTooMany404Errors($request, $config): bool {
+        $ip = $request->ip();
         $cacheKey = "404_errors:{$ip}";
-        $errors = Cache::get($cacheKey, 0);
 
+        $hits = Cache::increment($cacheKey);
+        if ($request->isMethod('GET') && $request->getStatusCode() === 404) {
+            Cache::put($cacheKey, $hits, now()->addMinutes(5));
+        }
 
-//        if ($request->isMethod('GET') && $request->getStatusCode() === 404) {
-//            Cache::put($cacheKey, $errors + 1, now()->addMinutes(5));
-//            if ($errors + 1 > $config['max_404_errors']) {
-//                return Redirect::to('/captcha');
-//            }
-//        }
-
-        if ($errors > $config['404_protection']['max_404_errors']) {
-            Cache::put("blocked_ip:{$ip}", true, now()->addMinutes($config['404_protection']['block_time_minutes']));
+        if ($hits > $config['404_protection']['max_404_errors']) {
             return true;
         }
 
