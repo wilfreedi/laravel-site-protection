@@ -14,7 +14,7 @@ class SiteProtectionServiceProvider extends ServiceProvider
                          ], 'config');
 
         // Загрузка маршрутов
-        $this->loadRoutesFrom(__DIR__.'/Http/routes.php');
+        $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
 
         // Загрузка представлений
         $this->loadViewsFrom(__DIR__.'/Resources/views', 'siteprotection');
