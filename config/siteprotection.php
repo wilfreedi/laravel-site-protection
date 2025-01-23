@@ -10,6 +10,10 @@ return [
                 'site_key'   => env('RECAPTCHA_SITE_KEY'),
                 'secret_key' => env('RECAPTCHA_SECRET_KEY'),
             ],
+            'yandex' => [
+                'site_key'   => env('YANDEX_SITE_KEY'),
+                'secret_key' => env('YANDEX_SECRET_KEY'),
+            ],
         ],
     ],
 

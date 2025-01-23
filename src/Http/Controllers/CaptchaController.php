@@ -14,7 +14,7 @@ class CaptchaController
             return redirect('/');
         }
 
-        $provider = config('siteprotection.captcha.site_key');
+        $provider = config('siteprotection.captcha.provider');
         $siteKey = config("siteprotection.captcha.providers.$provider.site_key");
         return view('siteprotection::captcha', [
             'siteKey'  => $siteKey,
@@ -27,7 +27,7 @@ class CaptchaController
         if (!config('siteprotection.captcha.enabled')) {
             return redirect('/');
         }
-        $provider = config('siteprotection.captcha.site_key');
+        $provider = config('siteprotection.captcha.provider');
         $secretKey = config("siteprotection.captcha.providers.$provider.secret_key");
 
         $response = $request->input('g-recaptcha-response');
