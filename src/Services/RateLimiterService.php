@@ -33,14 +33,13 @@ class RateLimiterService {
         return false;
     }
 
-    public static function hasTooMany404Errors($request, $config): bool {
-        $ip = $request->ip();
+    public static function hasTooMany404Errors($ip, $config): bool {
         $cacheKey = "404_errors:{$ip}";
 
         $hits = Cache::increment($cacheKey);
-        if ($request->isMethod('GET') && $request->getStatusCode() === 404) {
-            Cache::put($cacheKey, $hits, now()->addMinutes(5));
-        }
+//        if ($request->isMethod('GET') && $request->getStatusCode() === 404) {
+//            Cache::put($cacheKey, $hits, now()->addMinutes(5));
+//        }
 
         if ($hits > $config['404_protection']['max_404_errors']) {
             return true;
