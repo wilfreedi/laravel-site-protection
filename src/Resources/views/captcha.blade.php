@@ -33,18 +33,18 @@
                     </div>
                 @endif
 
-                    <form method="POST" action="{{ route('site-protection.captcha.verify') }}">
-                        @csrf
+                <form method="POST" action="{{ route('site-protection.captcha.verify') }}">
+                    @csrf
 
-                        @if($provider == 'recaptcha')
-                            <div class="g-recaptcha" data-sitekey="{{ $siteKey }}"></div>
-                        @elseif($provider == 'yandex')
-                            <div class="smart-captcha" data-sitekey="{{ $siteKey }}"></div>
-                        @endif
+                    @if($provider == 'recaptcha')
+                        <div class="g-recaptcha" data-sitekey="{{ $siteKey }}"></div>
+                    @elseif($provider == 'yandex')
+                        <div class="smart-captcha" data-sitekey="{{ $siteKey }}"></div>
+                    @endif
 
-                        <button type="submit">Verify</button>
+                    <button type="submit">Verify</button>
 
-                    </form>
+                </form>
 
             </div>
         </div>

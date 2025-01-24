@@ -4,8 +4,7 @@ namespace Wilfreedi\SiteProtection\Services;
 
 use Illuminate\Support\Facades\Cache;
 
-class BlockService
-{
+class BlockService {
 
     public static function addBlackList(string $ip, int $minutes): void {
         Cache::put("black_list_ip:{$ip}", true, now()->addMinutes($minutes));

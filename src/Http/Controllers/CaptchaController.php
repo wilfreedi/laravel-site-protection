@@ -4,7 +4,9 @@ namespace Wilfreedi\SiteProtection\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Wilfreedi\SiteProtection\Services\BlockService;
-use Wilfreedi\SiteProtection\Services\SiteProtectionService;
+use Wilfreedi\SiteProtection\Services\Captcha\GoogleService;
+use Wilfreedi\SiteProtection\Services\Captcha\YandexService;
+use Wilfreedi\SiteProtection\Services\SessionService;
 
 class CaptchaController
 {
@@ -28,21 +30,30 @@ class CaptchaController
             return redirect('/');
         }
         $provider = config('siteprotection.captcha.provider');
-        $secretKey = config("siteprotection.captcha.providers.$provider.secret_key");
 
-        $response = $request->input('g-recaptcha-response');
+        $ip = $request->ip();
 
-        $verify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret={$secretKey}&response={$response}");
-        $captchaSuccess = json_decode($verify);
-
-        if ($captchaSuccess->success) {
-            $ip = $request->ip();
-
-            BlockService::addWhiteList($ip);
-
-            return redirect('/');
+        $message = 'Captcha verification failed';
+        if($provider == 'recaptcha') {
+            $token = $request->input('g-recaptcha-response');
+            $google = new GoogleService($ip, $token);
+            if(!$google->captchaCheck()) {
+                return back()->with(['error' => $message]);
+            }
+        } else if($provider == 'yandex') {
+            $token = $request->input('token');
+            $yandex = new YandexService($ip, $token);
+            if(!$yandex->captchaCheck()) {
+                return back()->with(['error' => $message]);
+            }
+        } else {
+            abort(404);
         }
 
-        return back()->with(['error' => 'Captcha verification failed.']);
+        BlockService::addWhiteList($ip);
+
+        $url = SessionService::getBeforeLink();
+        SessionService::removeBeforeLink();
+        return redirect($url);
     }
 }

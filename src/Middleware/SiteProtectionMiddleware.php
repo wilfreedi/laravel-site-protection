@@ -6,7 +6,7 @@ use Closure;
 use Wilfreedi\SiteProtection\Services\BlockService;
 use Wilfreedi\SiteProtection\Services\BotCheckerService;
 use Wilfreedi\SiteProtection\Services\RateLimiterService;
-use Wilfreedi\SiteProtection\Services\SiteProtectionService;
+use Wilfreedi\SiteProtection\Services\SessionService;
 
 class SiteProtectionMiddleware
 {
@@ -32,11 +32,14 @@ class SiteProtectionMiddleware
             return $next($request);
         }
 
+        $url = $request->fullUrl();
         if (BotCheckerService::check($request, $config)) {
+            SessionService::setBeforeLink($url);
             return to_route('site-protection.captcha.show');
         }
 
         if (RateLimiterService::check($request, $config)) {
+            SessionService::setBeforeLink($url);
             return to_route('site-protection.captcha.show');
         }
 

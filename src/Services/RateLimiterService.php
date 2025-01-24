@@ -4,8 +4,7 @@ namespace Wilfreedi\SiteProtection\Services;
 
 use Illuminate\Support\Facades\Cache;
 
-class RateLimiterService
-{
+class RateLimiterService {
 
     public static function check($request, $config): bool {
         $ip = $request->ip();

@@ -2,8 +2,8 @@
 
 namespace Wilfreedi\SiteProtection\Services;
 
-class BotCheckerService
-{
+class BotCheckerService {
+
     public static function check($request, $config): bool {
         $userAgent = $request->header('User-Agent');
 
