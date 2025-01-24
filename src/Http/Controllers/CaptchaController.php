@@ -12,7 +12,7 @@ class CaptchaController
 {
     public function show() {
 
-        if (!config('siteprotection.captcha.enabled')) {
+        if (!config('siteprotection.enabled')) {
             return redirect('/');
         }
 
@@ -26,7 +26,7 @@ class CaptchaController
 
     public function verify(Request $request) {
 
-        if (!config('siteprotection.captcha.enabled')) {
+        if (!config('siteprotection.enabled')) {
             return redirect('/');
         }
         $provider = config('siteprotection.captcha.provider');

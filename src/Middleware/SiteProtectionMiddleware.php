@@ -30,7 +30,7 @@ class SiteProtectionMiddleware
 
         $path = $request->path();
 
-        $config['exclude_paths'][] = 'site-protection/captcha';
+        $config['exclude_paths'][] = 'site-protection-captcha';
         if (in_array($path, $config['exclude_paths'])) {
             return $next($request);
         }

@@ -31,6 +31,6 @@ return [
     ],
 
     'exclude_paths' => [
-        '/health-check',
+        'health-check',
     ],
 ];
