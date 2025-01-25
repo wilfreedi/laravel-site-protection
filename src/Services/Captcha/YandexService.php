@@ -4,7 +4,7 @@ namespace Wilfreedi\SiteProtection\Services\Captcha;
 
 use GuzzleHttp\Client;
 
-class YandexService {
+class YandexService implements CaptchaInterface {
 
     private string $url = 'https://smartcaptcha.yandexcloud.net/validate';
     private string $secret;

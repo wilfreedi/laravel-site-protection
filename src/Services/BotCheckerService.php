@@ -11,6 +11,12 @@ class BotCheckerService {
             return true;
         }
 
+        if($config['bots']['enabled_all']) {
+            if(stripos($userAgent, 'bot') !== false) {
+                return true;
+            }
+        }
+
         foreach ($config['bots']['allowed'] as $bot) {
             if (stripos($userAgent, $bot) !== false) {
                 return false;

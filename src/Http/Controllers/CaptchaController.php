@@ -16,11 +16,18 @@ class CaptchaController
             return redirect('/');
         }
 
+        $theme = config('siteprotection.theme_color');
         $provider = config('siteprotection.captcha.provider');
         $siteKey = config("siteprotection.captcha.providers.$provider.site_key");
+
+        if(!$siteKey) {
+            abort(404);
+        }
+
         return view('siteprotection::captcha', [
             'siteKey'  => $siteKey,
-            'provider' => $provider
+            'provider' => $provider,
+            'theme'    => $theme
         ]);
     }
 
@@ -30,6 +37,10 @@ class CaptchaController
             return redirect('/');
         }
         $provider = config('siteprotection.captcha.provider');
+        $siteKey = config("siteprotection.captcha.providers.$provider.secret_key");
+        if(!$siteKey) {
+            abort(404);
+        }
 
         $ip = $request->ip();
 

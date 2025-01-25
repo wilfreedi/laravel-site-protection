@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Cache;
 
 class RateLimiterService {
 
+    private static string $keyRateLimit = 'rate_limit';
+    private static string $key404Errors = '404_errors';
+
     public static function check($request, $config): bool {
         $ip = $request->ip();
 
@@ -21,12 +24,12 @@ class RateLimiterService {
     }
 
     public static function isRateLimited($ip, $config): bool {
-        $cacheKey = "rate_limit:{$ip}";
+        $cacheKey = self::$keyRateLimit . '.' . $ip;
 
         $hits = Cache::increment($cacheKey);
-        Cache::put($cacheKey, $hits, now()->addSeconds(1));
+        Cache::put($cacheKey, $hits, now()->addSeconds($config['rate_limiting']['time']));
 
-        if ($hits > $config['rate_limiting']['max_requests_per_second']) {
+        if ($hits > $config['rate_limiting']['max_requests']) {
             return true;
         }
 
@@ -34,18 +37,20 @@ class RateLimiterService {
     }
 
     public static function hasTooMany404Errors($ip, $config): bool {
-        $cacheKey = "404_errors:{$ip}";
+        $cacheKey = self::$key404Errors . '.' . $ip;
 
-        $hits = Cache::increment($cacheKey);
-//        if ($request->isMethod('GET') && $request->getStatusCode() === 404) {
-//            Cache::put($cacheKey, $hits, now()->addMinutes(5));
-//        }
+        $hits = Cache::get($cacheKey, 0);
 
         if ($hits > $config['404_protection']['max_404_errors']) {
             return true;
         }
 
         return false;
+    }
+
+    public static function increment404Errors($ip): void {
+        $cacheKey = self::$key404Errors . '.' . $ip;
+        Cache::increment($cacheKey);
     }
 
 }
