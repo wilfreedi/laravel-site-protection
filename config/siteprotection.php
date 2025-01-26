@@ -23,7 +23,7 @@ return [
 
     'bots' => [
         'enabled_all' => true,//включить|выключить отправку на капчу всех, у кого в useragent есть вхождение - bot true|false
-        'blocked'     => ['BadBot', 'EvilScraper'],//название ботов для блокировки
+        'blocked'     => ['Bytespider', 'SemrushBot', 'MJ12bot', 'AhrefsBot', 'bingbot', 'DotBot', 'LinkpadBot', 'SputnikBot', 'statdom.ru', 'MegaIndex.ru', 'WebDataStats', 'Jooblebot', 'Baiduspider', 'BackupLand', 'NetcraftSurveyAgent', 'openstat.ru', 'AspiegelBot', 'serpstatbot', 'Nimbostratus-Bot', 'SeznamBotgit', 'DataForSeoBot', 'BLEXBot', 'PetalBot', 'Barkrowler', 'facebookexternalhit', 'ClaudeBot', 'Amazonbot', 'GeedoProductSearch', 'meta-externalagent', 'GPTBot', 'Screaming'],//название ботов для блокировки
         'allowed'     => ['Googlebot', 'Yandexbot'],//название ботов, которых пропускам
     ],
 

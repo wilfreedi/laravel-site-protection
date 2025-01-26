@@ -4,7 +4,7 @@ namespace Wilfreedi\SiteProtection\Services;
 
 class SessionService {
 
-    private static string $key = 'before_link';
+    private static string $key = 'siteprotection';
     private static string $keyBeforeLink = 'before_link';
 
     public static function setBeforeLink(string $link): void {

@@ -62,9 +62,11 @@ class CaptchaController
         }
 
         BlockService::addWhiteList($ip);
+        BlockService::removeGrayList($ip);
 
         $url = SessionService::getBeforeLink();
         SessionService::removeBeforeLink();
+
         return redirect($url);
     }
 }

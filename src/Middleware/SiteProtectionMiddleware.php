@@ -13,6 +13,8 @@ class SiteProtectionMiddleware
 
     public function handle($request, Closure $next) {
 
+        $routeRedirect = to_route('site-protection.redirect');
+
         $config = config('siteprotection');
         $ip = $request->ip();
 
@@ -22,6 +24,10 @@ class SiteProtectionMiddleware
 
         if(BlockService::isBlackList($ip)) {
             abort(403);
+        }
+
+        if(BlockService::isGrayList($ip)) {
+            return $routeRedirect;
         }
 
         if(BlockService::isWhiteList($ip)) {
@@ -38,12 +44,14 @@ class SiteProtectionMiddleware
         $url = $request->fullUrl();
         if (BotCheckerService::check($request, $config)) {
             SessionService::setBeforeLink($url);
-            return to_route('site-protection.captcha.show');
+            BlockService::addGrayList($ip);
+            return $routeRedirect;
         }
 
         if (RateLimiterService::check($request, $config)) {
             SessionService::setBeforeLink($url);
-            return to_route('site-protection.captcha.show');
+            BlockService::addGrayList($ip);
+            return $routeRedirect;
         }
 
         return $next($request);
