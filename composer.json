@@ -38,7 +38,10 @@
       ],
       "aliases": {
         "AcMen": "Wilfreedi\\SiteProtection\\Facades\\SiteProtection"
-      }
+      },
+      "assets": [
+        "public/site-protection/js/script.js"
+      ]
     }
   }
 }

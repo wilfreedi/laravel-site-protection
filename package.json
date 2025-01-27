@@ -1,0 +1,26 @@
+{
+  "name": "laravel-site-protection",
+  "version": "1.0.0",
+  "description": "<h1 align=\"center\">\r   <a href=\"https://github.com/wilfreedi/laravel-site-protection\">\r     Laravel Site Protection\r   </a>\r </h1>\r <p align=\"center\">\r   <a href=\"LICENSE\"><img alt=\"Packagist License\" src=\"https://img.shields.io/packagist/l/wilfreedi/laravel-site-protection\"></a>\r   <a href=\"https://packagist.org/packages/wilfreedi/laravel-site-protection\"><img alt=\"Packagist Downloads\" src=\"https://img.shields.io/packagist/dt/wilfreedi/laravel-site-protection\"></a>\r   <a href=\"https://packagist.org/packages/wilfreedi/laravel-site-protectioni\"><img alt=\"Packagist Version\" src=\"https://img.shields.io/packagist/v/wilfreedi/laravel-site-protection\"></a>\r </p>\r <p align=\"center\">\r Базовая защита сайта на laravel\r </p>",
+  "main": "vite.config.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wilfreedi/laravel-site-protection.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wilfreedi/laravel-site-protection/issues"
+  },
+  "homepage": "https://github.com/wilfreedi/laravel-site-protection#readme",
+  "devDependencies": {
+    "rollup-plugin-obfuscator": "^1.1.0",
+    "vite": "^6.0.11",
+    "vite-plugin-obfuscator": "^1.0.5"
+  }
+}

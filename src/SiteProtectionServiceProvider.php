@@ -12,20 +12,26 @@ class SiteProtectionServiceProvider extends ServiceProvider
     {
         // Публикация конфигурации
         $this->publishes([
-                             __DIR__.'/../config/siteprotection.php' => config_path('siteprotection.php'),
-                         ], 'config');
+            __DIR__ . '/../config/siteprotection.php' => config_path('siteprotection.php'),
+        ], 'config');
+
+        // Публикация JS-файла
+        $this->publishes([
+            __DIR__ . '/../public/site-protection/js/script.js' => public_path('site-protection/js/script.js'),
+        ], 'site-protection-assets');
 
         // Загрузка маршрутов
-        $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+        $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
 
         // Загрузка представлений
-        $this->loadViewsFrom(__DIR__.'/Resources/views', 'siteprotection');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'siteprotection');
+
     }
 
     public function register()
     {
         $this->mergeConfigFrom(
-            __DIR__.'/../config/siteprotection.php',
+            __DIR__ . '/../config/siteprotection.php',
             'siteprotection'
         );
 

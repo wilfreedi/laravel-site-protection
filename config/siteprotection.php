@@ -7,6 +7,11 @@ return [
 
     'description' => '<p>Мы заметили подозрительную активность с вашего IP адреса. Пожалуйста, подтвердите, что вы не робот</p>',//текст, выводится на странице капчи
 
+    'js' => [
+        'enabled' => false,//проверка, что js включен true|false
+        'key'     => 'siteprotection'//ключ для шифрования данных, AES-128 (длина 16 байт)
+    ],
+
     'captcha' => [
         'provider'  => 'recaptcha',//сервис капчи recaptcha|yandex
         'providers' => [
