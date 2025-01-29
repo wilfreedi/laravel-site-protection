@@ -93,7 +93,7 @@ class UserInfoCollector {
             body: JSON.stringify(encryptedData),
         });
 
-        return response.ok;
+        // return response.ok;
     }
 }
 

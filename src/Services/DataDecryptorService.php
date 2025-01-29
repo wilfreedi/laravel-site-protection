@@ -10,9 +10,10 @@ class DataDecryptorService
         $this->encryptionKey = $encryptionKey;
     }
 
-    public function decryptData($encryptedData, $iv) {
+    public function decryptData($encryptedData, $iv, $tag) {
         $decodedEncryptedData = base64_decode($encryptedData);
         $decodedIv = base64_decode($iv);
+        $decodedTag = base64_decode($tag);
 
         $decryptedData = openssl_decrypt(
             $decodedEncryptedData,
@@ -20,13 +21,19 @@ class DataDecryptorService
             $this->encryptionKey,
             OPENSSL_RAW_DATA,
             $decodedIv,
-            $tag = null
+            $decodedTag // Передаем тег аутентификации
         );
 
         if ($decryptedData === false) {
-            throw new \Exception("Decryption failed");
+            return [
+                'success' => false,
+                'message' => 'Decryption failed'
+            ];
         }
 
-        return json_decode($decryptedData, true);
+        return [
+            'success' => true,
+            'data' => json_decode($decryptedData, true)
+        ];
     }
 }

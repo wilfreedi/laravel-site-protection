@@ -39,6 +39,13 @@ protected $middlewareGroups = [
 ];
 ```
 
+### Проверка работы JS у пользователя
+
+1) Включаем в настройках проверку JS `js.check` = `true`
+2) Генерируем рандомный ключ AES-128 (длина 16 байт) и добавляем его в `js.key`, он будет использоваться для шифрования передаваемых данных с JS на сервер  
+3) Выводим сгенерированный ключ в шапке сайта `<meta name="protection-key" content="{{ config('siteprotection.js.key') }}">`
+4) Подключаем JS скрипт проверки `<script defer="defer" type="application/javascript" src="{{ asset('site-protection/js/script.js') }}"></script>`(JS скрипт нужно опубликовать у себя, через команду публикации файла настроек)
+
 ## Публикация файла настроек
 
 ``php artisan vendor:publish --provider="Wilfreedi\SiteProtection\SiteProtectionServiceProvider"``
@@ -51,7 +58,7 @@ protected $middlewareGroups = [
 | `theme_color`                   | `string` | `white/black`        | цвет темы на странице проверки капчи                                                                                 |  
 | `description`                   | `string` | `<p>Мы заме..</p>`   | текст, выводится на странице капчи                                                                                   |  
 | `js.check`                      | `bool`   | `true/false`         | проверка, что js включен                                                                                             |  
-| `js.key`                        | `string` | `1234567890abcdef`   | ключ для шифрования передоваемых данных через js на сервер, AES-128 (длина 16 байт)                                  |  
+| `js.key`                        | `string` | `1234567890abcdef`   | ключ для шифрования передаваемых данных через js на сервер, AES-128 (длина 16 байт)                                  |  
 | `captcha.provider`              | `string` | `recaptcha/yandex`   | сервис капчи                                                                                                         |  
 | `bots.enabled_all`              | `bool`   | `true/false`         | включение отправки на капчу всех, у кого в useragent есть вхождение - bot                                            |  
 | `bots.blocked`                  | `array`  | `['Bytespider'...]`  | название ботов для блокировки                                                                                        |  
