@@ -18,8 +18,8 @@ class UserInfoCollector {
         };
 
         const screenData = {
-            screenWidth: window.screen.width, // Ширина экрана
-            screenHeight: window.screen.height, // Высота экрана
+            width: window.screen.width, // Ширина экрана
+            height: window.screen.height, // Высота экрана
             colorDepth: window.screen.colorDepth, // Глубина цвета
         };
 

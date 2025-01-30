@@ -3,6 +3,8 @@
 namespace Wilfreedi\SiteProtection\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Wilfreedi\SiteProtection\Services\BlockService;
+use Wilfreedi\SiteProtection\Services\BotCheckerService;
 use Wilfreedi\SiteProtection\Services\DataDecryptorService;
 
 class ProtectionDataController
@@ -19,6 +21,7 @@ class ProtectionDataController
         }
         $key = config('siteprotection.js.key');
 
+        $ip = $request->ip();
         $encryptedData = $request->input('data');
 
         // 1. Декодируем Base64
@@ -38,19 +41,21 @@ class ProtectionDataController
         $decodedTag = $data['message'];
 
         $decryptor = new DataDecryptorService($key);
-        try {
-            $decryptedData = $decryptor->decryptData($decodedEncryptedData, $decodedIv, $decodedTag);
+        $decryptedData = $decryptor->decryptData($decodedEncryptedData, $decodedIv, $decodedTag);
 
-            // TODO: Нужно сделать проверки на бота
-
+        if($decryptedData['success']) {
+            $isBot = BotCheckerService::validateBot($decryptedData['data']);
+            if($isBot) {
+                BlockService::addGrayList($ip);
+            }
             return response()->json([
-                'success' => true,
-                'data'    => $decryptedData
-            ], 200);
-        } catch (Exception $e) {
-            $response['message'] = $e->getMessage();
+                                        'success' => true,
+                                        'bot'     => $isBot
+                                    ], 200);
+        } else {
+            BlockService::addGrayList($ip);
+            $response['message'] = 'Decryption failed';
             return response()->json($response, 400);
         }
-        return response()->json($response, 400);
     }
 }
