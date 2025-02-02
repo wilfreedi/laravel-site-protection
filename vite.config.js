@@ -11,15 +11,15 @@ export default defineConfig({
             output: {
                 entryFileNames: '[name].js', // Имя собранного файла
             },
-            // plugins: [
-            //     obfuscator({
-            //         compact: true,
-            //         controlFlowFlattening: true,
-            //         deadCodeInjection: true,
-            //         stringArrayEncoding: ['base64'],
-            //         disableConsoleOutput: true,
-            //     }),
-            // ],
+            plugins: [
+                obfuscator({
+                    compact: true,
+                    controlFlowFlattening: true,
+                    deadCodeInjection: true,
+                    stringArrayEncoding: ['base64'],
+                    disableConsoleOutput: true,
+                }),
+            ],
         },
     },
     root: '.', // Корень проекта

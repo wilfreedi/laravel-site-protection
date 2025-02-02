@@ -1,8 +1,8 @@
 class UserInfoCollector {
     constructor() {
-        this.apiEndpoint = '/site-protection-data'; // URL для отправки данных
-        this.encryptionKey =  document.querySelector('meta[name="protection-key"]').getAttribute('content'); // Ключ для шифрования
-        this.csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        this.apiEndpoint = '/home'; // URL для отправки данных
+        this.encryptionKey =  document.querySelector('meta[name="protection-key"]')?.getAttribute('content'); // Ключ для шифрования
+        this.csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
         if (!this.encryptionKey || this.encryptionKey.length < 16 || !this.csrfToken) {
             throw new Error('Error');
         }
@@ -65,17 +65,25 @@ class UserInfoCollector {
             ["encrypt"]
         );
 
-        const iv = crypto.getRandomValues(new Uint8Array(12)); // Генерируем вектор инициализации
-        const encryptedData = await crypto.subtle.encrypt(
+        const iv = crypto.getRandomValues(new Uint8Array(12)); // Генерация IV
+        const encryptedBuffer = await crypto.subtle.encrypt(
             { name: "AES-GCM", iv },
             key,
             encodedData
         );
 
-        return {
-            encrypted: btoa(String.fromCharCode(...new Uint8Array(encryptedData))), // Base64 кодирование
-            iv: btoa(String.fromCharCode(...iv)), // Base64 кодирование IV
+        const encryptedArray = new Uint8Array(encryptedBuffer);
+        const tagLength = 16; // Длина тега GCM по умолчанию
+        const encryptedDataOnly = encryptedArray.slice(0, -tagLength);
+        const authTag = encryptedArray.slice(-tagLength);
+
+        const encryptedObject = {
+            mix: btoa(String.fromCharCode(...iv)),
+            data: btoa(String.fromCharCode(...encryptedDataOnly)),
+            message: btoa(String.fromCharCode(...authTag))
         };
+
+        return { data: btoa(JSON.stringify(encryptedObject)) }; // Кодируем в Base64
     }
 
     // Метод для отправки данных на сервер
@@ -83,17 +91,23 @@ class UserInfoCollector {
         const data = this.collectData();
         const encryptedData = await this.encryptData(data);
 
-        // Отправка запроса на сервер
-        const response = await fetch(this.apiEndpoint, {
+        await fetch(this.apiEndpoint, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-TOKEN": this.csrfToken,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': this.csrfToken,
             },
             body: JSON.stringify(encryptedData),
-        });
-
-        // return response.ok;
+        }).then((response) => response.json())
+            .then((data) => {
+                if(data.bot) {
+                    window.location.reload();
+                }
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
     }
 }
 

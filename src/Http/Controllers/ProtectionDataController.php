@@ -24,10 +24,8 @@ class ProtectionDataController
         $ip = $request->ip();
         $encryptedData = $request->input('data');
 
-        // 1. Декодируем Base64
         $jsonString = base64_decode($encryptedData);
 
-        // 2. Преобразуем JSON в массив
         $data = json_decode($jsonString, true);
 
         if (!isset($data['mix'], $data['data'], $data['message'])) {
@@ -35,7 +33,6 @@ class ProtectionDataController
             return response()->json($response, 400);
         }
 
-        // 4. Декодируем отдельные части
         $decodedIv = $data['mix'];
         $decodedEncryptedData = $data['data'];
         $decodedTag = $data['message'];

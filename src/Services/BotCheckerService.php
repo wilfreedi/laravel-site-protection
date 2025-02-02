@@ -33,11 +33,11 @@ class BotCheckerService {
     }
 
     public static function validateBot($data) {
-        $cookiesEnabled = $data['navigator']['cookiesEnabled'];
-        $width = $data['screen']['width'];
-        $height = $data['screen']['height'];
-        $colorDepth = $data['screen']['colorDepth'];
-        $isAutomated = $data['isAutomated'];
+        $cookiesEnabled = $data['navigator']['cookiesEnabled'] ?? false;
+        $width = $data['screen']['width'] ?? 0;
+        $height = $data['screen']['height'] ?? 0;
+        $colorDepth = $data['screen']['colorDepth'] ?? 0;
+        $isAutomated = $data['isAutomated'] ?? true;
 
         $isBot = false;
 
