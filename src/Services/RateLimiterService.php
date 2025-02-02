@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Cache;
 class RateLimiterService {
 
     private static string $keyRateLimit = 'rate_limit';
+    private static string $keyRateLimitAll = 'rate_limit_all';
     private static string $key404Errors = '404_errors';
 
     public static function check($request, $config): bool {
@@ -21,6 +22,11 @@ class RateLimiterService {
         }
 
         return false;
+    }
+
+    public static function incrementRateLimitAll($ip): void {
+        $cacheKey = self::$keyRateLimitAll . '.' . $ip;
+        Cache::increment($cacheKey);
     }
 
     public static function isRateLimited($ip, $config): bool {

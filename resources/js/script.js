@@ -1,6 +1,6 @@
 class UserInfoCollector {
     constructor() {
-        this.apiEndpoint = '/home'; // URL для отправки данных
+        this.apiEndpoint = '/site-protection-data'; // URL для отправки данных
         this.encryptionKey =  document.querySelector('meta[name="protection-key"]')?.getAttribute('content'); // Ключ для шифрования
         this.csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
         if (!this.encryptionKey || this.encryptionKey.length < 16 || !this.csrfToken) {

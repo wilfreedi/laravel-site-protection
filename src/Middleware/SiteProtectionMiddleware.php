@@ -13,7 +13,7 @@ class SiteProtectionMiddleware
 
     public function handle($request, Closure $next) {
 
-        $routeRedirect = to_route('site-protection.redirect');
+        $routeRedirect = to_route('site-protection.captcha.show');
 
         $config = config('siteprotection');
         $ip = $request->ip();
@@ -21,6 +21,8 @@ class SiteProtectionMiddleware
         if (!$config['enabled']) {
             return $next($request);
         }
+
+        RateLimiterService::incrementRateLimitAll($ip);
 
         if(BlockService::isBlackList($ip)) {
             abort(403);
