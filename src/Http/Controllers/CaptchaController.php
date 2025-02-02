@@ -3,10 +3,10 @@
 namespace Wilfreedi\SiteProtection\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Wilfreedi\SiteProtection\Helpers\SessionHelper;
 use Wilfreedi\SiteProtection\Services\BlockService;
 use Wilfreedi\SiteProtection\Services\Captcha\GoogleService;
 use Wilfreedi\SiteProtection\Services\Captcha\YandexService;
-use Wilfreedi\SiteProtection\Services\SessionService;
 
 class CaptchaController
 {
@@ -64,8 +64,8 @@ class CaptchaController
         BlockService::addWhiteList($ip);
         BlockService::removeGrayList($ip);
 
-        $url = SessionService::getBeforeLink();
-        SessionService::removeBeforeLink();
+        $url = SessionHelper::getBeforeLink();
+        SessionHelper::removeBeforeLink();
 
         return redirect($url);
     }

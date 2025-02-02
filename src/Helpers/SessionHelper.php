@@ -1,8 +1,8 @@
 <?php
 
-namespace Wilfreedi\SiteProtection\Services;
+namespace Wilfreedi\SiteProtection\Helpers;
 
-class SessionService {
+class SessionHelper {
 
     private static string $key = 'siteprotection';
     private static string $keyBeforeLink = 'before_link';

@@ -3,10 +3,10 @@
 namespace Wilfreedi\SiteProtection\Middleware;
 
 use Closure;
+use Wilfreedi\SiteProtection\Helpers\SessionHelper;
 use Wilfreedi\SiteProtection\Services\BlockService;
 use Wilfreedi\SiteProtection\Services\BotCheckerService;
 use Wilfreedi\SiteProtection\Services\RateLimiterService;
-use Wilfreedi\SiteProtection\Services\SessionService;
 
 class SiteProtectionMiddleware
 {
@@ -44,14 +44,17 @@ class SiteProtectionMiddleware
         }
 
         $url = $request->fullUrl();
-        if (BotCheckerService::check($request, $config)) {
-            SessionService::setBeforeLink($url);
+        $checkBot = BotCheckerService::check($request, $config);
+        if($checkBot == 1) {
+            SessionHelper::setBeforeLink($url);
             BlockService::addGrayList($ip);
             return $routeRedirect;
+        } else if($checkBot == 2) {
+            return $next($request);
         }
 
         if (RateLimiterService::check($request, $config)) {
-            SessionService::setBeforeLink($url);
+            SessionHelper::setBeforeLink($url);
             BlockService::addGrayList($ip);
             return $routeRedirect;
         }

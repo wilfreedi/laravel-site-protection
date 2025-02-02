@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Wilfreedi\SiteProtection\Services\BlockService;
 use Wilfreedi\SiteProtection\Services\BotCheckerService;
 use Wilfreedi\SiteProtection\Services\DataDecryptorService;
+use Wilfreedi\SiteProtection\Services\RateLimiterService;
 
 class ProtectionDataController
 {
@@ -44,6 +45,8 @@ class ProtectionDataController
             $isBot = BotCheckerService::validateBot($decryptedData['data']);
             if($isBot) {
                 BlockService::addGrayList($ip);
+            } else {
+                RateLimiterService::incrementJSValidate($ip);
             }
             return response()->json([
                                         'success' => true,

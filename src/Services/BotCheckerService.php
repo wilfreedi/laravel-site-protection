@@ -4,32 +4,37 @@ namespace Wilfreedi\SiteProtection\Services;
 
 class BotCheckerService {
 
-    public static function check($request, $config): bool {
+    /*
+     * 0 - Все норм
+     * 1 - Бот
+     * 2 - Бот из белого списка
+     */
+    public static function check($request, $config): int {
         $userAgent = $request->header('User-Agent');
 
         if (empty($userAgent)) {
-            return true;
+            return 1;
         }
 
         foreach ($config['bots']['allowed'] as $bot) {
             if (stripos($userAgent, $bot) !== false) {
-                return false;
+                return 2;
             }
         }
 
         if($config['bots']['enabled_all']) {
             if(stripos($userAgent, 'bot') !== false) {
-                return true;
+                return 1;
             }
         }
 
         foreach ($config['bots']['blocked'] as $bot) {
             if (stripos($userAgent, $bot) !== false) {
-                return true;
+                return 1;
             }
         }
 
-        return false;
+        return 0;
     }
 
     public static function validateBot($data) {
