@@ -9,7 +9,6 @@ class RateLimiterService {
     private static string $keyRateLimit = 'rate_limit';
     private static string $keyRateLimitAll = 'rate_limit_all';
     private static string $key404Errors = '404_errors';
-    private static string $keyJSValidate = 'js_validate';
 
     public static function check($request, $config): bool {
         $ip = $request->ip();
@@ -22,16 +21,17 @@ class RateLimiterService {
             return true;
         }
 
-        if (self::isJSValidate($ip, $config)) {
-            return true;
-        }
-
         return false;
     }
 
     public static function incrementRateLimitAll($ip): void {
         $cacheKey = self::$keyRateLimitAll . '.' . $ip;
         CacheHelper::increment($cacheKey);
+    }
+
+    public static function getRateLimitAll($ip): int {
+        $cacheKey = self::$keyRateLimitAll . '.' . $ip;
+        return CacheHelper::get($cacheKey);
     }
 
     public static function isRateLimited($ip, $config): bool {
@@ -58,33 +58,9 @@ class RateLimiterService {
         return false;
     }
 
-    public static function isJSValidate($ip, $config): bool {
-        if($config['js']['enabled']) {
-            $cacheKeyJS = self::$keyJSValidate . '.' . $ip;
-            $cacheKey = self::$keyRateLimitAll . '.' . $ip;
-
-            $jsValidate = CacheHelper::get($cacheKeyJS);
-            if (!$jsValidate) {
-                $hits = CacheHelper::get($cacheKey);
-
-                if ($hits >= 2) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
     public static function increment404Errors($ip): void {
         $cacheKey = self::$key404Errors . '.' . $ip;
         CacheHelper::increment($cacheKey);
     }
-    public static function incrementJSValidate($ip): void {
-        $cacheKey = self::$keyJSValidate . '.' . $ip;
-        CacheHelper::increment($cacheKey);
-    }
-
-
-
 
 }

@@ -6,6 +6,7 @@ use Closure;
 use Wilfreedi\SiteProtection\Helpers\SessionHelper;
 use Wilfreedi\SiteProtection\Services\BlockService;
 use Wilfreedi\SiteProtection\Services\BotCheckerService;
+use Wilfreedi\SiteProtection\Services\JSCheckerService;
 use Wilfreedi\SiteProtection\Services\RateLimiterService;
 
 class SiteProtectionMiddleware
@@ -54,6 +55,12 @@ class SiteProtectionMiddleware
         }
 
         if (RateLimiterService::check($request, $config)) {
+            SessionHelper::setBeforeLink($url);
+            BlockService::addGrayList($ip);
+            return $routeRedirect;
+        }
+
+        if(JSCheckerService::check($request, $config)) {
             SessionHelper::setBeforeLink($url);
             BlockService::addGrayList($ip);
             return $routeRedirect;
